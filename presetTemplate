@@ -1,0 +1,18 @@
+447448 //start with a validation check, to ensure the file is a valid file
+NAME Vintage //NAME followed by space followed by the name of the preset
+START //depicts start of preset
+
+TREMOLO 9 0.5  //A line will depict the effect name, followed by the number to use
+
+ECHO 1 2 3 0.5 //If all numbers aren't found in a line, error out the parser
+
+STEP //All effects between steps are in parallel, each whole step is in series
+
+BOOSTER 2079
+
+STEP
+
+BITCRUSH 2
+
+END //end of preset, stop reading and finalize configuration
+

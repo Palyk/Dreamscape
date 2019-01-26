@@ -1,0 +1,590 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#define DELAY_MAX 1000000
+#define DELAY_MIN 0
+
+int waveform[]= {0x800,0x80c,0x819,0x826,0x833,0x840,0x84d,0x85a,0x866,0x873,0x880,0x88d,0x89a,0x8a7,0x8b3,0x8c0,
+0x8cd,0x8da,0x8e7,0x8f3,0x900,0x90d,0x91a,0x926,0x933,0x940,0x94c,0x959,0x966,0x973,0x97f,0x98c,
+0x998,0x9a5,0x9b2,0x9be,0x9cb,0x9d7,0x9e4,0x9f0,0x9fd,0xa09,0xa16,0xa22,0xa2e,0xa3b,0xa47,0xa53,
+0xa60,0xa6c,0xa78,0xa84,0xa91,0xa9d,0xaa9,0xab5,0xac1,0xacd,0xad9,0xae5,0xaf1,0xafd,0xb09,0xb15,
+0xb21,0xb2d,0xb38,0xb44,0xb50,0xb5c,0xb67,0xb73,0xb7e,0xb8a,0xb96,0xba1,0xbac,0xbb8,0xbc3,0xbcf,
+0xbda,0xbe5,0xbf0,0xbfc,0xc07,0xc12,0xc1d,0xc28,0xc33,0xc3e,0xc49,0xc53,0xc5e,0xc69,0xc74,0xc7e,
+0xc89,0xc94,0xc9e,0xca9,0xcb3,0xcbd,0xcc8,0xcd2,0xcdc,0xce6,0xcf1,0xcfb,0xd05,0xd0f,0xd19,0xd23,
+0xd2c,0xd36,0xd40,0xd4a,0xd53,0xd5d,0xd66,0xd70,0xd79,0xd82,0xd8c,0xd95,0xd9e,0xda7,0xdb0,0xdb9,
+0xdc2,0xdcb,0xdd4,0xddd,0xde6,0xdee,0xdf7,0xdff,0xe08,0xe10,0xe19,0xe21,0xe29,0xe31,0xe39,0xe41,
+0xe49,0xe51,0xe59,0xe61,0xe69,0xe70,0xe78,0xe7f,0xe87,0xe8e,0xe96,0xe9d,0xea4,0xeab,0xeb2,0xeb9,
+0xec0,0xec7,0xece,0xed5,0xedb,0xee2,0xee8,0xeef,0xef5,0xefc,0xf02,0xf08,0xf0e,0xf14,0xf1a,0xf20,
+0xf26,0xf2b,0xf31,0xf37,0xf3c,0xf42,0xf47,0xf4c,0xf51,0xf57,0xf5c,0xf61,0xf66,0xf6a,0xf6f,0xf74,
+0xf79,0xf7d,0xf82,0xf86,0xf8a,0xf8f,0xf93,0xf97,0xf9b,0xf9f,0xfa3,0xfa6,0xfaa,0xfae,0xfb1,0xfb5,
+0xfb8,0xfbb,0xfbf,0xfc2,0xfc5,0xfc8,0xfcb,0xfce,0xfd0,0xfd3,0xfd6,0xfd8,0xfdb,0xfdd,0xfdf,0xfe2,
+0xfe4,0xfe6,0xfe8,0xfea,0xfeb,0xfed,0xfef,0xff0,0xff2,0xff3,0xff5,0xff6,0xff7,0xff8,0xff9,0xffa,
+0xffb,0xffc,0xffc,0xffd,0xffe,0xffe,0xffe,0xfff,0xfff,0xfff,0xfff,0xfff,0xfff,0xfff,0xffe,0xffe,
+0xffe,0xffd,0xffc,0xffc,0xffb,0xffa,0xff9,0xff8,0xff7,0xff6,0xff5,0xff3,0xff2,0xff0,0xfef,0xfed,
+0xfeb,0xfea,0xfe8,0xfe6,0xfe4,0xfe2,0xfdf,0xfdd,0xfdb,0xfd8,0xfd6,0xfd3,0xfd0,0xfce,0xfcb,0xfc8,
+0xfc5,0xfc2,0xfbf,0xfbb,0xfb8,0xfb5,0xfb1,0xfae,0xfaa,0xfa6,0xfa3,0xf9f,0xf9b,0xf97,0xf93,0xf8f,
+0xf8a,0xf86,0xf82,0xf7d,0xf79,0xf74,0xf6f,0xf6a,0xf66,0xf61,0xf5c,0xf57,0xf51,0xf4c,0xf47,0xf42,
+0xf3c,0xf37,0xf31,0xf2b,0xf26,0xf20,0xf1a,0xf14,0xf0e,0xf08,0xf02,0xefc,0xef5,0xeef,0xee8,0xee2,
+0xedb,0xed5,0xece,0xec7,0xec0,0xeb9,0xeb2,0xeab,0xea4,0xe9d,0xe96,0xe8e,0xe87,0xe7f,0xe78,0xe70,
+0xe69,0xe61,0xe59,0xe51,0xe49,0xe41,0xe39,0xe31,0xe29,0xe21,0xe19,0xe10,0xe08,0xdff,0xdf7,0xdee,
+0xde6,0xddd,0xdd4,0xdcb,0xdc2,0xdb9,0xdb0,0xda7,0xd9e,0xd95,0xd8c,0xd82,0xd79,0xd70,0xd66,0xd5d,
+0xd53,0xd4a,0xd40,0xd36,0xd2c,0xd23,0xd19,0xd0f,0xd05,0xcfb,0xcf1,0xce6,0xcdc,0xcd2,0xcc8,0xcbd,
+0xcb3,0xca9,0xc9e,0xc94,0xc89,0xc7e,0xc74,0xc69,0xc5e,0xc53,0xc49,0xc3e,0xc33,0xc28,0xc1d,0xc12,
+0xc07,0xbfc,0xbf0,0xbe5,0xbda,0xbcf,0xbc3,0xbb8,0xbac,0xba1,0xb96,0xb8a,0xb7e,0xb73,0xb67,0xb5c,
+0xb50,0xb44,0xb38,0xb2d,0xb21,0xb15,0xb09,0xafd,0xaf1,0xae5,0xad9,0xacd,0xac1,0xab5,0xaa9,0xa9d,
+0xa91,0xa84,0xa78,0xa6c,0xa60,0xa53,0xa47,0xa3b,0xa2e,0xa22,0xa16,0xa09,0x9fd,0x9f0,0x9e4,0x9d7,
+0x9cb,0x9be,0x9b2,0x9a5,0x998,0x98c,0x97f,0x973,0x966,0x959,0x94c,0x940,0x933,0x926,0x91a,0x90d,
+0x900,0x8f3,0x8e7,0x8da,0x8cd,0x8c0,0x8b3,0x8a7,0x89a,0x88d,0x880,0x873,0x866,0x85a,0x84d,0x840,
+0x833,0x826,0x819,0x80c,0x800,0x7f3,0x7e6,0x7d9,0x7cc,0x7bf,0x7b2,0x7a5,0x799,0x78c,0x77f,0x772,
+0x765,0x758,0x74c,0x73f,0x732,0x725,0x718,0x70c,0x6ff,0x6f2,0x6e5,0x6d9,0x6cc,0x6bf,0x6b3,0x6a6,
+0x699,0x68c,0x680,0x673,0x667,0x65a,0x64d,0x641,0x634,0x628,0x61b,0x60f,0x602,0x5f6,0x5e9,0x5dd,
+0x5d1,0x5c4,0x5b8,0x5ac,0x59f,0x593,0x587,0x57b,0x56e,0x562,0x556,0x54a,0x53e,0x532,0x526,0x51a,
+0x50e,0x502,0x4f6,0x4ea,0x4de,0x4d2,0x4c7,0x4bb,0x4af,0x4a3,0x498,0x48c,0x481,0x475,0x469,0x45e,
+0x453,0x447,0x43c,0x430,0x425,0x41a,0x40f,0x403,0x3f8,0x3ed,0x3e2,0x3d7,0x3cc,0x3c1,0x3b6,0x3ac,
+0x3a1,0x396,0x38b,0x381,0x376,0x36b,0x361,0x356,0x34c,0x342,0x337,0x32d,0x323,0x319,0x30e,0x304,
+0x2fa,0x2f0,0x2e6,0x2dc,0x2d3,0x2c9,0x2bf,0x2b5,0x2ac,0x2a2,0x299,0x28f,0x286,0x27d,0x273,0x26a,
+0x261,0x258,0x24f,0x246,0x23d,0x234,0x22b,0x222,0x219,0x211,0x208,0x200,0x1f7,0x1ef,0x1e6,0x1de,
+0x1d6,0x1ce,0x1c6,0x1be,0x1b6,0x1ae,0x1a6,0x19e,0x196,0x18f,0x187,0x180,0x178,0x171,0x169,0x162,
+0x15b,0x154,0x14d,0x146,0x13f,0x138,0x131,0x12a,0x124,0x11d,0x117,0x110,0x10a,0x103,0xfd,0xf7,
+0xf1,0xeb,0xe5,0xdf,0xd9,0xd4,0xce,0xc8,0xc3,0xbd,0xb8,0xb3,0xae,0xa8,0xa3,0x9e,
+0x99,0x95,0x90,0x8b,0x86,0x82,0x7d,0x79,0x75,0x70,0x6c,0x68,0x64,0x60,0x5c,0x59,
+0x55,0x51,0x4e,0x4a,0x47,0x44,0x40,0x3d,0x3a,0x37,0x34,0x31,0x2f,0x2c,0x29,0x27,
+0x24,0x22,0x20,0x1d,0x1b,0x19,0x17,0x15,0x14,0x12,0x10,0xf,0xd,0xc,0xa,0x9,
+0x8,0x7,0x6,0x5,0x4,0x3,0x3,0x2,0x1,0x1,0x1,0x0,0x0,0x0,0x0,0x0,
+0x0,0x0,0x1,0x1,0x1,0x2,0x3,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xa,0xc,
+0xd,0xf,0x10,0x12,0x14,0x15,0x17,0x19,0x1b,0x1d,0x20,0x22,0x24,0x27,0x29,0x2c,
+0x2f,0x31,0x34,0x37,0x3a,0x3d,0x40,0x44,0x47,0x4a,0x4e,0x51,0x55,0x59,0x5c,0x60,
+0x64,0x68,0x6c,0x70,0x75,0x79,0x7d,0x82,0x86,0x8b,0x90,0x95,0x99,0x9e,0xa3,0xa8,
+0xae,0xb3,0xb8,0xbd,0xc3,0xc8,0xce,0xd4,0xd9,0xdf,0xe5,0xeb,0xf1,0xf7,0xfd,0x103,
+0x10a,0x110,0x117,0x11d,0x124,0x12a,0x131,0x138,0x13f,0x146,0x14d,0x154,0x15b,0x162,0x169,0x171,
+0x178,0x180,0x187,0x18f,0x196,0x19e,0x1a6,0x1ae,0x1b6,0x1be,0x1c6,0x1ce,0x1d6,0x1de,0x1e6,0x1ef,
+0x1f7,0x200,0x208,0x211,0x219,0x222,0x22b,0x234,0x23d,0x246,0x24f,0x258,0x261,0x26a,0x273,0x27d,
+0x286,0x28f,0x299,0x2a2,0x2ac,0x2b5,0x2bf,0x2c9,0x2d3,0x2dc,0x2e6,0x2f0,0x2fa,0x304,0x30e,0x319,
+0x323,0x32d,0x337,0x342,0x34c,0x356,0x361,0x36b,0x376,0x381,0x38b,0x396,0x3a1,0x3ac,0x3b6,0x3c1,
+0x3cc,0x3d7,0x3e2,0x3ed,0x3f8,0x403,0x40f,0x41a,0x425,0x430,0x43c,0x447,0x453,0x45e,0x469,0x475,
+0x481,0x48c,0x498,0x4a3,0x4af,0x4bb,0x4c7,0x4d2,0x4de,0x4ea,0x4f6,0x502,0x50e,0x51a,0x526,0x532,
+0x53e,0x54a,0x556,0x562,0x56e,0x57b,0x587,0x593,0x59f,0x5ac,0x5b8,0x5c4,0x5d1,0x5dd,0x5e9,0x5f6,
+0x602,0x60f,0x61b,0x628,0x634,0x641,0x64d,0x65a,0x667,0x673,0x680,0x68c,0x699,0x6a6,0x6b3,0x6bf,
+0x6cc,0x6d9,0x6e5,0x6f2,0x6ff,0x70c,0x718,0x725,0x732,0x73f,0x74c,0x758,0x765,0x772,0x77f,0x78c,
+0x799,0x7a5,0x7b2,0x7bf,0x7cc,0x7d9,0x7e6,0x7f3,0x800,};
+
+
+int summer(int aud1, int aud2) {
+	/*if(aud1 == 0) {
+	  //printf("sum=%d\n",aud2);
+		return aud2;
+	}
+	if(aud2 == 0) {
+	  printf("sum=%d\n",aud1);
+		return aud1;
+	}*/
+	//long temp = (aud1 * 4096) + (aud2 * 4096);
+	//temp = temp / (4096*2);
+	int a1 = aud1-2048;
+	int a2 = aud2-2048;
+	int out = (a1+a2)/2;
+	out = out +2030;
+	//printf("sum of %d,%d=%d\n",aud1,aud2,out);
+	//int out = temp & 0xFFF;
+	
+	return out;
+}
+
+
+
+//added for posterity, literally does nothing
+int clean(int sound) {
+  return sound;
+}
+
+//crushVal should only be from 0-12
+int bitcrush(int sound, int crushVal) {
+  int temp = sound << crushVal;
+  return temp;
+}
+
+//boostVal is default at 1024, add or subtract 100 based on up/down
+int booster(int sound, int boostVal) {
+  int temp = (int)((float)(sound) * (float)((float) boostVal / (float) 2048.0));
+  return temp;
+}
+
+
+//delayVal will be 100000 +- 50000n, hopefully the statics work as intended
+int delayeff(int sound, int delayVal) {
+  static int Delay_Buffer[DELAY_MAX] = { 0 };
+  static int DelayCounter = 0;
+  //Delay_Buffer[DelayCounter] = sound;
+  //int temp = (Delay_Buffer[DelayCounter] + sound)>>1;
+  //return temp;
+  int temp = summer(sound, Delay_Buffer[DelayCounter]);
+  Delay_Buffer[DelayCounter] = sound;
+  DelayCounter++;
+  if(DelayCounter >= delayVal) DelayCounter = 0;
+  return temp;
+}
+
+//start distortVal at 100, increment/decrement by 10
+int distortion(int sound, int distortVal) {
+  int temp = sound;
+  if(sound > 2048 + distortVal) {
+    temp = 2048 + distortVal;
+  }
+  if(sound < 2048 - distortVal) {
+    temp = 2048 - distortVal;
+  }
+  return temp;
+}
+
+//echo works similar to delay
+int echo(int sound, int delayVal) {
+  static int Echo_Buffer[DELAY_MAX] = { 0 };
+  static int EchoCounter = 0;
+  //Echo_Buffer[EchoCounter] = Echo_Buffer[EchoCounter];
+  //Echo_Buffer[EchoCounter]=(sound + Echo_Buffer[EchoCounter])>>3;
+  
+  Echo_Buffer[EchoCounter] = summer(sound, Echo_Buffer[EchoCounter]);
+
+
+  int temp = summer(sound, Echo_Buffer[EchoCounter]);
+  
+  EchoCounter++;
+  if(EchoCounter >= delayVal) EchoCounter = 0;
+  
+
+  //int temp = (sound + (Echo_Buffer[EchoCounter]))>>3;
+  return temp;
+}
+
+//start at 100, increment/decrement by 10
+int fuzz(int sound, int fuzzVal) {
+  int temp = sound;
+  if(temp > 2048 + fuzzVal) temp = 4095;
+  if(temp < 2048 - fuzzVal) temp = 0;
+  return temp;
+
+}
+
+//Note: have incoming delayVal be different than other delayVals
+int looper(int sound, int delayVal, int isRecord, int j, int doWipe) {
+	static unsigned long Loop_Buffer[3][DELAY_MAX] = {2048};
+	//printf("Test: %d\n",Loop_Buffer[0][100]);
+	static int init = 0;
+	if(init==0) {
+	    init = 1;
+	    for(int x=0; x<3;++x) {
+			  for(int y=0; y<DELAY_MAX;++y) {
+			      Loop_Buffer[x][y]=2048;
+			  }
+			}
+	}
+	static int LoopCounter = 0;
+	static int recordedOnce = 0;
+	static int wasRecording = 0;
+	static int dynamicEnd = DELAY_MAX;
+	int i;
+	//printf("%d\n", LoopCounter);
+	if(LoopCounter > delayVal && delayVal != 0) {
+	  LoopCounter = 0;
+	}
+	if(LoopCounter > dynamicEnd && delayVal == 0) {
+	  LoopCounter = 0;
+	}
+	if(isRecord == -1) { //sent when changing presets
+	  for(i = 0; i<DELAY_MAX; ++i) {
+	    Loop_Buffer[j][i]=0;
+	  }
+	  LoopCounter=0;
+	  recordedOnce = 0;
+	  wasRecording = 0;
+	  dynamicEnd=DELAY_MAX;
+	}
+	if(isRecord == 0) {
+	  if(wasRecording == 1) {
+	    wasRecording = 0;
+	    dynamicEnd = LoopCounter;
+	    
+	    printf("dynamicEnd=%d\n",dynamicEnd);
+	    if(delayVal == 0) {
+	      LoopCounter = 0;
+	    }
+	  }
+	  int out = summer(sound,Loop_Buffer[j][LoopCounter]);
+	  ++LoopCounter;
+	  return out;
+	}
+	if(isRecord == 1) { //recording
+	  if(wasRecording == 0) { //just started recording
+	    wasRecording = 1;
+	    if(delayVal == 0 || recordedOnce == 0) { //if dynamic size or first recording
+	      LoopCounter = 0;
+	      recordedOnce = 1;
+	      dynamicEnd = DELAY_MAX; //reset size
+	    }
+		if((doWipe & 1) == 1 || recordedOnce == 0) {
+			for(int x=0; x<3;++x) {
+			  for(int y=0; y<DELAY_MAX;++y) {
+			      Loop_Buffer[x][y]=2048;
+			  }
+			}
+		}
+	    //end of wasRecording
+	  }
+	  int out = summer(Loop_Buffer[j][LoopCounter], sound); //sum of audio
+	  //printf("buffer before edit:%d\n",Loop_Buffer[j][LoopCounter]);
+	  Loop_Buffer[j][LoopCounter] = out ; //store output at spot
+	  ++LoopCounter;
+	  //printf("Sound=%d,%d, out=%d\n",sound, Loop_Buffer[j][LoopCounter-1],out);
+	  return out; //return output
+	}
+}
+
+int invertLooper(int sound, int delayVal, int isRecord, int j, int doWipe) {
+	static int Loop_Buffer[3][DELAY_MAX] = { 2048 };
+	static int init = 0;
+	if(init==0) {
+	    init = 1;
+	    for(int x=0; x<3;++x) {
+			  for(int y=0; y<DELAY_MAX;++y) {
+			      Loop_Buffer[x][y]=2048;
+			  }
+			}
+	}
+	static int LoopCounter = 0;
+	static int inverseCounter = DELAY_MAX;
+	static int recordedOnce = 0;
+	static int wasRecording = 0;
+	static int dynamicEnd = DELAY_MAX;
+	int i;
+	//printf("%d\n", LoopCounter);
+	if(LoopCounter > delayVal && delayVal != 0) {
+	  LoopCounter = 0;
+	}
+	if(LoopCounter > dynamicEnd && delayVal == 0) {
+	  LoopCounter = 0;
+	}
+	if(inverseCounter <0) {
+	  if(delayVal != 0) {
+	    inverseCounter = delayVal;
+	  }
+	  else {
+	    inverseCounter = dynamicEnd;
+	  }
+	}
+	if(isRecord == -1) { //sent when changing presets
+	  for(i = 0; i<DELAY_MAX; ++i) {
+	    Loop_Buffer[j][i]=0;
+	  }
+	  LoopCounter=0;
+	  recordedOnce = 0;
+	  wasRecording = 0;
+	  inverseCounter = DELAY_MAX;
+	  dynamicEnd=DELAY_MAX;
+	}
+	if(isRecord == 0) {
+	  if(wasRecording == 1) {
+	    wasRecording = 0;
+	    dynamicEnd = LoopCounter;
+	    inverseCounter = delayVal;
+	    if(delayVal == 0) {
+	      LoopCounter = 0;
+	      inverseCounter = dynamicEnd;
+	    }
+		
+	  }
+	  int out = summer(Loop_Buffer[j][inverseCounter], sound);
+	  ++LoopCounter;
+	  --inverseCounter;
+	  return out;
+	}
+	if(isRecord == 1) { //recording
+	  if(wasRecording == 0) { //just started recording
+	    wasRecording = 1;
+	    if(delayVal == 0 || recordedOnce == 0) { //if dynamic size or first recording
+	      LoopCounter = 0;
+	      recordedOnce = 1;
+	      inverseCounter = DELAY_MAX;
+	      dynamicEnd = DELAY_MAX; //reset size
+	    }
+		if(doWipe == 1 || recordedOnce == 0) {
+			memset(Loop_Buffer, 0, sizeof(Loop_Buffer));
+			static int init = 0;
+			for(int x=0; x<3;++x) {
+			    for(int y=0; y<DELAY_MAX;++y) {
+				Loop_Buffer[x][y]=2048;
+			    }
+			}
+	
+		}
+	    //end of wasRecording
+	  }
+	  int out = summer(Loop_Buffer[j][inverseCounter], sound); //sum of audio
+	  Loop_Buffer[j][LoopCounter] = out; //store output at spot
+	  ++LoopCounter;
+	  --inverseCounter;
+	  return out; //return output
+	}
+}
+
+//TODO port octaver later, more complex than others
+int octaver(int sound, int delayVal, int octaverVal, int doWipe, int isRecord, int j) {
+	static int Octaver_Buffer[3][DELAY_MAX] = { 2048 };
+	static int init = 0;
+	if(init==0) {
+	    init = 1;
+	    for(int x=0; x<3;++x) {
+			  for(int y=0; y<DELAY_MAX;++y) {
+			      Octaver_Buffer[x][y]=2048;
+			  }
+			}
+	}
+	static int DelayWrite = 0;
+	static int DelayRead = 0;
+	static int divider = 0;
+	static int recordedOnce = 0;
+	static int wasRecording = 0;
+	static int dynamicEnd = DELAY_MAX;
+	int i;
+	if((doWipe & 4)== 0) {
+		Octaver_Buffer[j][DelayWrite]=sound;
+		DelayWrite++;
+		if(DelayWrite >= delayVal) DelayWrite = 0; //TODO change 50000 to a passable int later, not necessary for now
+		int temp = Octaver_Buffer[j][DelayRead];
+	
+		if((octaverVal & 3) == 2) DelayRead = DelayRead + 2;
+		if((octaverVal & 3) == 1) DelayRead = DelayRead + 1;
+		if((octaverVal & 3) == 0) {
+			divider++;
+			if(divider >=2) {
+				DelayRead = DelayRead + 1;
+				divider = 0;
+			
+			}
+		}
+		if(DelayRead >= delayVal) DelayRead = 0; //TODO change 50000 to a passable int later, not necessary for now
+		
+		return temp;
+	}
+	else {
+		if(DelayWrite >= delayVal && delayVal != 0) DelayWrite = 0;
+		if(DelayRead >= delayVal && delayVal != 0) DelayRead = 0;
+		if(DelayWrite >=dynamicEnd && delayVal == 0) DelayWrite = 0;
+		if(DelayRead >= dynamicEnd && delayVal == 0) DelayRead = 0;
+		if(isRecord == -1) {
+			for(i=0; i<DELAY_MAX; ++i) {
+				Octaver_Buffer[j][i]=0;
+			}
+			DelayRead = 0;
+			DelayWrite = 0;
+			recordedOnce = 0;
+			wasRecording = 0;
+			dynamicEnd = DELAY_MAX;
+		}
+		if(isRecord == 0) {
+			if(wasRecording == 1) {
+				wasRecording = 0;
+				dynamicEnd = DelayWrite;
+				if(delayVal == 0) {
+					DelayRead = 0;
+				}
+			}
+			int out = summer(sound,Octaver_Buffer[j][DelayRead]);
+			if((octaverVal & 3) == 2) DelayRead = DelayRead + 2;
+			if((octaverVal & 3) == 1) DelayRead = DelayRead + 1;
+			if((octaverVal & 3) == 0) {
+				divider++;
+				if(divider >=2) {
+					DelayRead = DelayRead + 1;
+					divider = 0;
+			
+				}
+			}
+			
+			return out;
+		}
+		if(isRecord == 1) {
+			if(wasRecording == 0) {
+				wasRecording = 1;
+				if(delayVal == 0 || recordedOnce == 0) {
+					DelayWrite = 0;
+					DelayRead = 0;
+					recordedOnce = 1;
+					dynamicEnd = DELAY_MAX;
+				} //no DoWipe, probably not necessary but add later just below if deciding otherwise?
+				if((doWipe & 1) == 1 || recordedOnce == 0) {
+					memset(Octaver_Buffer, 0, sizeof(Octaver_Buffer));
+					for(int x=0; x<3;++x) {
+					  for(int y=0; y<DELAY_MAX;++y) {
+					    Octaver_Buffer[x][y]=2048;
+					  }
+					}
+				}
+			}
+			Octaver_Buffer[j][DelayWrite] = sound;
+			++DelayWrite;
+			int out = summer(sound,Octaver_Buffer[j][DelayRead]);
+			++DelayRead; //since the octaver isn't able to be active at this time
+			
+			return out;
+		}
+	}
+}
+
+//More complex echo, 
+int reverb(int sound, int delayVal1, int delayVal2, int delayVal3) {
+  static int rbuffer1[DELAY_MAX] = { 0 };
+  static int rbuffer2[DELAY_MAX] = { 0 };
+  static int rbuffer3[DELAY_MAX] = { 0 };
+  static int rcounter1 = 0;
+  static int rcounter2 = 0;
+  static int rcounter3 = 0;
+  
+  rbuffer1[rcounter1]=summer(sound, rbuffer1[rcounter1]);
+  rbuffer2[rcounter2]=summer(sound, rbuffer2[rcounter2]);
+  rbuffer3[rcounter3]=summer(sound, rbuffer3[rcounter3]);
+
+  int temp = summer(sound, rbuffer1[rcounter1]);
+  temp = summer(temp, rbuffer2[rcounter2]);
+  temp = summer(temp, rbuffer3[rcounter3]);
+  rbuffer1[rcounter1] = rbuffer1[rcounter1];
+  rbuffer2[rcounter2] = rbuffer2[rcounter2];
+  rbuffer3[rcounter3] = rbuffer3[rcounter3];
+  
+  rcounter1++;
+  rcounter2++;
+  rcounter3++;
+  if(rcounter1 >= delayVal1) rcounter1 = 0;
+  if(rcounter2 >= delayVal2) rcounter2 = 0;
+  if(rcounter3 >= delayVal3) rcounter3 = 0;
+  
+  //int temp = (sound + (rbuffer1[rcounter1])+(rbuffer2[rcounter2])+(rbuffer3[rcounter3]))>>2;
+
+  
+  return temp;
+}
+
+//tremolo effect,max_count starts at 25 and i/d 1, refrences above waveform
+int tremolo(int sound, int maxCount) {
+  static int divider = 0;
+  static int sample = 0;
+  divider++;
+  if(divider >= maxCount) {
+    divider = 0;
+    sample++;
+  }
+  if(sample == 999) sample = 1;
+  int temp = (int)(((float)sound) * ((float)waveform[sample]/4095.0));
+  return temp & 0xFFF;
+
+}
+
+int refOrigin(int sound) {
+	//the sound inputted here should be different than usual
+	//works like clean, but is separate for code clarity
+	return sound;
+}
+
+int noSound() {
+	return 0; //0
+}
+
+int fbLooper(int sound, int delayVal, int isRecord, int j, int doWipe) {
+  	static int Loop_Buffer[3][DELAY_MAX] = { 2048 };
+	static int init = 0;
+	if(init==0) {
+	    init = 1;
+	    for(int x=0; x<3;++x) {
+			  for(int y=0; y<DELAY_MAX;++y) {
+			      Loop_Buffer[x][y]=2048;
+			  }
+			}
+	}
+	static int LoopCounter = 0;
+	static int recordedOnce = 0;
+	static int wasRecording = 0;
+	static int playCounter = 0;
+	static int playDir = 0; //0=up, 1=down
+	static int dynamicEnd = DELAY_MAX;
+	int i;
+	//printf("%d\n", LoopCounter);
+	if(LoopCounter > delayVal && delayVal != 0) {
+	  LoopCounter = 0;
+	  
+	}
+	if(LoopCounter > dynamicEnd && delayVal == 0) {
+	  LoopCounter = 0;
+	  
+	}
+	if(playDir == 1 && playCounter == -1) {
+	  playCounter = 0;
+	  playDir = 0;
+	}
+	if(playDir == 0 && playCounter > delayVal && delayVal != 0) {
+	  playCounter = delayVal;
+	  playDir = 1;
+	}
+	if(playDir == 0 && playCounter > dynamicEnd && delayVal == 0) {
+	  playCounter = dynamicEnd;
+	  playDir = 1;
+	}
+	if(isRecord == -1) { //sent when changing presets
+	  for(i = 0; i<DELAY_MAX; ++i) {
+	    Loop_Buffer[j][i]=0;
+	  }
+	  LoopCounter=0;
+	  playCounter = 0;
+	  playDir = 0;
+	  recordedOnce = 0;
+	  wasRecording = 0;
+	  dynamicEnd=DELAY_MAX;
+	}
+	if(isRecord == 0) {
+	  if(wasRecording == 1) {
+	    wasRecording = 0;
+	    dynamicEnd = LoopCounter;
+	    if(delayVal == 0 ) {
+	      LoopCounter = 0;
+	      playCounter = 0;
+	      playDir= 0;
+	    }
+		if((doWipe & 4) == 4) {
+			playCounter = dynamicEnd;
+			playDir = 1;
+		}
+	  }
+	  int out = summer(sound,Loop_Buffer[j][playCounter]);
+	  ++LoopCounter;
+	  if(playDir == 0) ++playCounter;
+	  if(playDir == 1) --playCounter;
+	  //printf("p %d L %d \n", playCounter, LoopCounter);
+	  return out;
+	}
+	if(isRecord == 1) { //recording
+	  if(wasRecording == 0) { //just started recording
+	    wasRecording = 1;
+	    if(delayVal == 0 || recordedOnce == 0) { //if dynamic size or first recording
+	      LoopCounter = 0;
+	      playCounter = 0;
+	      playDir = 0;
+	      recordedOnce = 1;
+	      dynamicEnd = DELAY_MAX; //reset size
+	    }
+		if((doWipe & 1) == 1 || recordedOnce == 0) {
+			memset(Loop_Buffer, 0, sizeof(Loop_Buffer));
+			for(int x=0; x<3;++x) {
+			  for(int y=0; y<DELAY_MAX;++y) {
+			      Loop_Buffer[x][y]=2048;
+			  }
+			}
+		}
+	    //end of wasRecording
+	  }
+	  int out = summer(sound,Loop_Buffer[j][playCounter]); //sum of audio
+	  Loop_Buffer[j][LoopCounter] = out; //store output at spot
+	  ++LoopCounter;
+	  if(playDir == 0) ++playCounter;
+	  if(playDir == 1) --playCounter;
+	  //printf("p %d L %d \n", playCounter, LoopCounter);
+	  return out; //return output
+	}
+}

@@ -1,0 +1,9 @@
+wavIO:
+
+when BT done, have program wait for a connection while running, then have the method run idly.
+
+Parser:
+When BT done, implement method to parse data
+
+BT:
+Implement a connect/send/recieve method

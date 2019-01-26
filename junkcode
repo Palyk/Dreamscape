@@ -1,0 +1,112 @@
+//snippets of code that probably won't be used anymore
+//and clutter up wavIO and other apps
+//but can't just delete them right away
+//so they'll be moved here instead
+
+//SECTION 1
+//signal handler, i
+    
+    
+    /*appComm = fopen("./server/command.txt", "r");
+	fscanf(appComm, "%s", inBuf);
+	fscanf(appComm, "%s", inBuf);
+	inEffect = atoi(inBuf) - 1;
+	if(inEffect != selFile) {
+		printf("Hey this is new\n");
+		selFile = inEffect;
+		fclose(appComm);
+		readPreset(fileNames[selFile], &effect);
+		
+	}
+	else {
+	fclose(appComm);
+	if(feof(inFile)) {
+	   fclose(inFile);
+	   inFile = fopen(argv[1],"r");
+		while(inFile == NULL) {
+			inFile = fopen(argv[1], "r");
+		}
+	}
+	}*/
+	//phasing out getch for direct-to-bluetooth  
+	/*
+    inputc = mygetch();
+    if(inputc > 48 && inputc < 59) {
+      
+      selFile = inputc - '1';
+      clearPreset(&effect);
+      isRecord = 0;
+      readPreset(fileNames[selFile], &effect);
+      printf("Loaded preset %s.\n", effect.name);
+    }
+    if(inputc == ' ') {
+        break;
+    }
+    switch(inputc) {
+    case 'q':
+      ++effect.crushVal;
+      printf("%d\n", effect.crushVal);
+      break;
+    case 'a':
+      --effect.crushVal;
+      printf("%d\n", effect.crushVal);
+      break;
+    case 'w':
+      effect.boostVal +=500;
+      break;
+    case 's':
+      effect.boostVal -=500;
+      break;
+    case 'e':
+      effect.delayVal +=50000;
+      break;
+    case 'd':
+      effect.delayVal -=50000;
+      break;
+    case 'r':
+      effect.distortVal +=10;
+      break;
+    case 'f':
+      effect.distortVal -=10;
+      break;
+    case 't':
+		if(isRecord) {
+			isRecord = 0;
+		}
+		else {
+			isRecord = 1;
+		}
+      break;
+    case 'g':
+	  ++effect.octaverVal;
+	  if(effect.octaverVal > 2) effect.octaverVal = 2;
+      break;
+	case 'b':
+	  --effect.octaverVal;
+	  if(effect.octaverVal < 0) effect.octaverVal = 0;
+	  break;
+    case 'y':
+      effect.fuzzVal +=10;
+      break;
+    case 'h':
+      effect.fuzzVal -=10;
+      break;
+	case 'o':
+	  effect.delayVal1 += 5000;
+	  effect.delayVal2 += 5000;
+	  effect.delayVal3 += 5000;
+	  break;
+    case 'l':
+	  effect.delayVal1 -= 5000;
+	  effect.delayVal2 -= 5000;
+	  effect.delayVal3 -= 5000;
+	  break;
+	case '+':
+      ++effect.maxCount;
+      break;
+    case '-':
+      --effect.maxCount;
+      break;
+    }
+    */
+//SECTION 2

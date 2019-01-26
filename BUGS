@@ -1,0 +1,1 @@
+-Setting a value to 0 in a function that would then otherwise run as clean does not run as clean. For example, bitcrush 0 should output the same sound that is inputted, but it does not. (SOLVED, BE CAREFUL OF WEIGHTING)

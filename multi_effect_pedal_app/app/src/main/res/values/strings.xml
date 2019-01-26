@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Multi-Effect Pedal App</string>
+    <string name="text_title_multieffect_pedal">Multi-Effect Pedalboard</string>
+    <string name="button_play">Play</string>
+    <string name="button_config">Configure</string>
+    <string name="tv_play">Play</string>
+    <string name="tv_config">Configure</string>
+    <string name="newFile">New Effect</string>
+    <string name="Download">Download</string>
+    <string name="Name">Name</string>
+    <string name="Create">Create</string>
+    <string-array name="effects_array">
+        <item>Clean</item>
+        <item>Bitcrusher</item>
+        <item>Booster</item>
+        <item>Delay</item>
+        <item>Distortion</item>
+        <item>Echo</item>
+        <item>Fuzz</item>
+        <item>Looper</item>
+        <item>Octaver</item>
+        <item>Reverb</item>
+        <item>Tremolo</item>
+        <item>Reverse Looper</item>
+        <item>No Sound</item>
+        <item>Forward/Backward Looper</item>
+    </string-array>
+    <string-array name="presets_array">
+        <item>Choose a Preset...</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+</resources>
